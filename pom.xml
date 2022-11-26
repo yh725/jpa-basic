@@ -21,6 +21,12 @@
             <artifactId>h2</artifactId>
             <version>2.1.214</version>
         </dependency>
+        <!-- Java 8 -> Java 9 버전업 시 해당 모듈이 제거됨 -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.4.0-b180830.0359</version>
+        </dependency>
     </dependencies>
 
     <properties>
