@@ -6,7 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 
-public class JpaMain {
+/*public class JpaMain {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -44,4 +44,4 @@ public class JpaMain {
         em.persist(member);
         return member;
     }
-}
+}*/
