@@ -6,7 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 
-/*public class JpaMain {
+public class JpaMain {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -18,13 +18,22 @@ import java.util.List;
 
         try {
 
-            Member member = saveMember(em);
+            Movie movie = new Movie();
+            movie.setDirector("aaaa");
+            movie.setActor("bbbb");
+            movie.setName("바람과함께사하지다");
+            movie.setPrice(10000);
 
-            Team team = new Team();
-            team.setName("teamA");
-            team.getMembers().add(member);
+            em.persist(movie);
 
-            em.persist(team);
+            em.flush();
+            em.clear();
+
+            /*Movie findMovie = em.find(Movie.class, movie.getId());
+            System.out.println("findMovie = " + findMovie);*/
+
+            Item item = em.find(Item.class, movie.getId());
+            System.out.println("item = " + item);
 
             tx.commit();
         } catch (Exception e) {
@@ -44,4 +53,4 @@ import java.util.List;
         em.persist(member);
         return member;
     }
-}*/
+}
