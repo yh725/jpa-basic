@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-/*public class JpaMain {
+public class JpaMain {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -16,14 +16,12 @@ import javax.persistence.Persistence;
         tx.begin();
 
         try {
-            Order order = new Order();
-//            order.addOrderItem(new OrderItem());
-            em.persist(order);
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영한");
 
-            em.persist(orderItem);
+            em.persist(book);
 
             tx.commit();
         } catch (Exception e) {
@@ -35,4 +33,4 @@ import javax.persistence.Persistence;
         emf.close();
 
     }
-}*/
+}
