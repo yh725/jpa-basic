@@ -22,9 +22,9 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
+//    @OneToOne
+//    @JoinColumn(name = "LOCKER_ID")
+//    private Locker locker;
 
     /*@ManyToMany
     @JoinTable(name = "MEMBER_PRODUCT")
@@ -53,4 +53,12 @@ public class Member extends BaseEntity {
         this.team = team;
         team.getMembers().add(this); //연관관계 편의 메소드
     }*/
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }
