@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
 
@@ -19,39 +20,38 @@ public class JpaMain {
 
         try {
 
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Team teamB = new Team();
+            teamB.setName("teamB");
+            em.persist(teamB);
+
+
             Member member1 = new Member();
             member1.setUsername("member1");
+            member1.setTeam(team);
             em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            member2.setTeam(teamB);
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println("refMember = " + refMember.getClass()); // Proxy
-//            refMember.getUsername(); //강제 초기화
-            Hibernate.initialize(refMember); //강제 초기화
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            List<Member> members = em.createQuery("select m from MemberJPA m join fetch m.team", Member.class)
+                    .getResultList();
 
-//            em.detach(refMember);
-//            em.close();
-//            em.clear();
+            /*Member m = em.find(Member.class, member1.getId());
 
-//            refMember.getUsername();
-//            System.out.println("refMember.getUsername = " + refMember.getUsername());
+            System.out.println("m = " + m.getTeam().getClass());
 
-            /*Member m1 = em.find(Member.class, member1.getId());
-            Member m2 = em.find(Member.class, member2.getId());
-
-            logic(m1, m2);*/
-
-//            Member findMember = em.find(Member.class, member.getId());
-            /*Member findMember = em.getReference(Member.class, member.getId());
-            System.out.println("findMember = " + findMember.getClass());
-            System.out.println("findMember.id = " + findMember.getId());
-            System.out.println("findMember.username = " + findMember.getUsername());*/
-
-//            printMember(member);
-//            printMemberAndTeam(member);
+            System.out.println("==========");
+            m.getTeam().getName(); //초기화
+            System.out.println("==========");*/
 
             tx.commit();
         } catch (Exception e) {
