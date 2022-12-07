@@ -20,7 +20,7 @@ public class JpqlMain {
 			em.persist(team);
 
 			Member member = new Member();
-			member.setUsername("TeamA");
+			member.setUsername("관리자");
 			member.setAge(10);
 			member.setType(MemberType.ADMIN);
 			member.setTeam(team);
@@ -30,18 +30,20 @@ public class JpqlMain {
 			em.flush();
 			em.clear();
 
-			/*String query = "select m.username, 'HELLO', true from MemberJ m " +
-					"where m.type = jpql.MemberType.USER";*/
-			String query = "select m.username, 'HELLO', true from MemberJ m " +
-					"where m.type = :userType and m.username is not null";
-			List<Object[]> result = em.createQuery(query)
-					.setParameter("userType", MemberType.ADMIN)
+			/*String query =
+					"select " +
+							"case when m.age <= 10 then '학생요금' " +
+							"     when m.age >= 60 then '경로요금' " +
+							"     else '일반요금' " +
+							"end " +
+					"from MemberJ m";*/
+//			String query = "select coalesce(m.username, '이름 없는 회원') as username from MemberJ m";
+			String query = "select NULLIF(m.username, '관리자') from MemberJ m";
+			List<String> result = em.createQuery(query, String.class)
 					.getResultList();
 
-			for (Object[] objects : result) {
-				System.out.println("objects[0] = " + objects[0]);
-				System.out.println("objects[1] = " + objects[1]);
-				System.out.println("objects[2] = " + objects[2]);
+			for (String s : result) {
+				System.out.println("s = " + s);
 			}
 
 			tx.commit();
