@@ -20,26 +20,41 @@ public class JpqlMain {
 			member.setAge(10);
 			em.persist(member);
 
-            /*TypedQuery<Member> query = em.createQuery("select m from Member as m", Member.class);
-            TypedQuery<String> query2 = em.createQuery("select m.username from Member as m", String.class);
-            Query query3 = em.createQuery("select m.username, m.age from Member as m");*/
+			/*List<Member> result = em.createQuery("select m from MemberJ as m", Member.class)
+					.getResultList();
 
-            /*TypedQuery<Member> query = em.createQuery("select m from Member as m", Member.class);
-            List<Member> resultList = query.getResultList();
-//            query.getSingleResult()
-            for (Member member1 : resultList) {
-                System.out.println("member1 = " + member1);
-            }*/
+			Member findMember = result.get(0);
+			findMember.setAge(20);*/
 
-            /*TypedQuery<Member> query = em.createQuery("select m from MemberJ as m where m.username = :username", Member.class);
-            query.setParameter("username", "member1");
-            Member singleResult = query.getSingleResult();
-            System.out.println("singleResult = " + singleResult.getUsername());*/
+//			List<Team> result = em.createQuery("select m.team from MemberJ as m", Team.class)
+//					.getResultList();
+//			List<Team> result2 = em.createQuery("select t from MemberJ as m join m.team as t", Team.class)
+//					.getResultList();
 
-			Member result = em.createQuery("select m from MemberJ as m where m.username = :username", Member.class)
-					.setParameter("username", "member1")
-					.getSingleResult();
-			System.out.println("result = " + result.getUsername());
+//			List<Address> result = em.createQuery("select o.address from OrderJ o", Address.class)
+//					.getResultList();
+
+			/*List resultList = em.createQuery("select distinct m.username, m.age from MemberJ m")
+					.getResultList();
+
+			Object o = resultList.get(0);
+			Object[] result = (Object[]) o;
+			System.out.println("username = " + result[0]);
+			System.out.println("age = " + result[1]);*/
+
+			/*List<Object[]> resultList = em.createQuery("select distinct m.username, m.age from MemberJ m")
+					.getResultList();
+
+			Object[] result = resultList.get(0);
+			System.out.println("username = " + result[0]);
+			System.out.println("age = " + result[1]);*/
+
+			List<MemberDTO> result = em.createQuery("select new jpql.MemberDTO(m.username, m.age) from MemberJ m", MemberDTO.class)
+					.getResultList();
+
+			MemberDTO memberDTO = result.get(0);
+			System.out.println("memberDTO = " + memberDTO.getUsername());
+			System.out.println("memberDTO = " + memberDTO.getAge());
 
 			tx.commit();
 		} catch (Exception e) {
