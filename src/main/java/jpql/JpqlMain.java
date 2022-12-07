@@ -22,6 +22,7 @@ public class JpqlMain {
 			Member member = new Member();
 			member.setUsername("TeamA");
 			member.setAge(10);
+			member.setType(MemberType.ADMIN);
 			member.setTeam(team);
 
 			em.persist(member);
@@ -29,12 +30,19 @@ public class JpqlMain {
 			em.flush();
 			em.clear();
 
-//			String query = "select (select avg(m1.age) from Member m1) as avgAge from MemberJ m left join Team t on m.username = t.name";
-			String query = "select mm.age from (select m.age MemberJ m) as mm"; //FROM 절 서브쿼리 불가
-			List<Member> result = em.createQuery(query, Member.class)
+			/*String query = "select m.username, 'HELLO', true from MemberJ m " +
+					"where m.type = jpql.MemberType.USER";*/
+			String query = "select m.username, 'HELLO', true from MemberJ m " +
+					"where m.type = :userType and m.username is not null";
+			List<Object[]> result = em.createQuery(query)
+					.setParameter("userType", MemberType.ADMIN)
 					.getResultList();
 
-			System.out.println("result = " + result.size());
+			for (Object[] objects : result) {
+				System.out.println("objects[0] = " + objects[0]);
+				System.out.println("objects[1] = " + objects[1]);
+				System.out.println("objects[2] = " + objects[2]);
+			}
 
 			tx.commit();
 		} catch (Exception e) {

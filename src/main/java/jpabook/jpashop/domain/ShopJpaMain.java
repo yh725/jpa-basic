@@ -23,6 +23,9 @@ public class ShopJpaMain {
 
             em.persist(book);
 
+            em.createQuery("select i from Item i where type(i) = Book", Item.class)
+                    .getResultList();
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
