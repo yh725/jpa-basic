@@ -15,30 +15,36 @@ public class JpqlMain {
 
 		try {
 
-			Team team = new Team();
+			/*Team team = new Team();
 			team.setName("TeamA");
-			em.persist(team);
+			em.persist(team);*/
 
 			Member member = new Member();
 			member.setUsername("관리자");
 			member.setAge(10);
 			member.setType(MemberType.ADMIN);
-			member.setTeam(team);
-
+//			member.setTeam(team);
 			em.persist(member);
+
+			Member member2 = new Member();
+			member2.setUsername("관리자2");
+			member2.setAge(10);
+			member2.setType(MemberType.ADMIN);
+//			member2.setTeam(team);
+			em.persist(member2);
 
 			em.flush();
 			em.clear();
 
-			/*String query =
-					"select " +
-							"case when m.age <= 10 then '학생요금' " +
-							"     when m.age >= 60 then '경로요금' " +
-							"     else '일반요금' " +
-							"end " +
-					"from MemberJ m";*/
-//			String query = "select coalesce(m.username, '이름 없는 회원') as username from MemberJ m";
-			String query = "select NULLIF(m.username, '관리자') from MemberJ m";
+//			String query = "select 'a' || 'b' from MemberJ m";
+//			String query = "select concat('a', 'b') from MemberJ m";
+//			String query = "select substring(m.username, 2, 3) from MemberJ m";
+//			String query = "select locate('de', 'abcdef') from MemberJ m";
+//			String query = "select size(t.members) from TeamJ t";
+			/*@OrderColumn
+			String query = "select index(t.members) from TeamJ t";*/
+//			String query = "select function('group_concat', m.username) from MemberJ m";
+			String query = "select group_concat(m.username) from MemberJ m";
 			List<String> result = em.createQuery(query, String.class)
 					.getResultList();
 
@@ -58,3 +64,4 @@ public class JpqlMain {
 
 	}
 }
+
