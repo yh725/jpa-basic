@@ -55,9 +55,15 @@ public class JpqlMain {
 				//회원 100명 -> N + 1
 			}*/
 
-			String query = "select distinct t from TeamJ t join fetch t.members";
+//			String query = "select distinct t from TeamJ t join fetch t.members";
+//			String query = "select m from MemberJ t join fetch m.team";
+			String query = "select t from TeamJ t";
 			List<Team> result = em.createQuery(query, Team.class)
+					.setFirstResult(0)
+					.setMaxResults(2)
 					.getResultList();
+
+			System.out.println("result.size() = " + result.size());
 
 			for (Team team : result) {
 				System.out.println("team = " + team.getName() + "|members=" + team.getMembers().size());
