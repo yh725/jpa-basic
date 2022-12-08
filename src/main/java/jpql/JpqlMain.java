@@ -16,40 +16,55 @@ public class JpqlMain {
 
 		try {
 
-			Team team = new Team();
-			team.setName("TeamA");
-			em.persist(team);
+			Team teamA = new Team();
+			teamA.setName("팀A");
+			em.persist(teamA);
 
-			Member member = new Member();
-			member.setUsername("관리자");
-			member.setAge(10);
-			member.setType(MemberType.ADMIN);
-			member.setTeam(team);
-			em.persist(member);
+			Team teamB = new Team();
+			teamB.setName("팀B");
+			em.persist(teamB);
+
+			Member member1 = new Member();
+			member1.setUsername("회원1");
+			member1.setTeam(teamA);
+			em.persist(member1);
 
 			Member member2 = new Member();
-			member2.setUsername("관리자2");
-			member2.setAge(10);
-			member2.setType(MemberType.ADMIN);
-			member2.setTeam(team);
+			member2.setUsername("회원2");
+			member2.setTeam(teamA);
 			em.persist(member2);
+
+			Member member3 = new Member();
+			member3.setUsername("회원3");
+			member3.setTeam(teamB);
+			em.persist(member3);
 
 			em.flush();
 			em.clear();
 
-//			String query = "select m.username from MemberJ m"; //상태 필드
-//			String query = "select m.team from MemberJ m"; //단일 값 연관 경로(묵시적인 내부 조인), 탐색 o - 웬만해선 배제
-//			String query = "select t.members from TeamJ t"; //컬렉션 값 연관 경로, 탐색 x
-			String query = "select m from TeamJ t join t.members m"; //명시적 조인
-			List<Collection> result = em.createQuery(query, Collection.class)
+			/*String query = "select m from MemberJ m join fetch m.team";
+			List<Member> result = em.createQuery(query, Member.class)
 					.getResultList();
 
-			for (Object o : result) {
-				System.out.println("o = " + o);
-			}
-			/*for (Member s : result) {
-				System.out.println("s = " + s);
+			for (Member member : result) {
+				System.out.println("member = " + member.getUsername() + ", " + member.getTeam().getName());
+				//회원1, 팀A(SQL)
+				//회원2, 팀A(1차캐시)
+				//회원3, 팀B(SQL)
+
+				//회원 100명 -> N + 1
 			}*/
+
+			String query = "select distinct t from TeamJ t join fetch t.members";
+			List<Team> result = em.createQuery(query, Team.class)
+					.getResultList();
+
+			for (Team team : result) {
+				System.out.println("team = " + team.getName() + "|members=" + team.getMembers().size());
+				for (Member member : team.getMembers()) {
+					System.out.println("-> member = " + member);
+				}
+			}
 
 			tx.commit();
 		} catch (Exception e) {
