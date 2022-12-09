@@ -42,20 +42,13 @@ public class JpqlMain {
 			em.flush();
 			em.clear();
 
-
-//			String query = "select m from MemberJ m where m.id = :memberId";
-			String query = "select m from MemberJ m where m.team = :team";
-			List<Member> findMember = em.createQuery(query, Member.class)
-					.setParameter("team", teamA)
+			List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+					.setParameter("username", "회원1")
 					.getResultList();
 
-//			System.out.println("findMember = " + findMember);
-
-			for (Member member : findMember) {
+			for (Member member : resultList) {
 				System.out.println("member = " + member);
 			}
-
-
 
 			tx.commit();
 		} catch (Exception e) {
