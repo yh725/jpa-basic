@@ -42,35 +42,20 @@ public class JpqlMain {
 			em.flush();
 			em.clear();
 
-			/*String query = "select m from MemberJ m join fetch m.team";
-			List<Member> result = em.createQuery(query, Member.class)
+
+//			String query = "select m from MemberJ m where m.id = :memberId";
+			String query = "select m from MemberJ m where m.team = :team";
+			List<Member> findMember = em.createQuery(query, Member.class)
+					.setParameter("team", teamA)
 					.getResultList();
 
-			for (Member member : result) {
-				System.out.println("member = " + member.getUsername() + ", " + member.getTeam().getName());
-				//회원1, 팀A(SQL)
-				//회원2, 팀A(1차캐시)
-				//회원3, 팀B(SQL)
+//			System.out.println("findMember = " + findMember);
 
-				//회원 100명 -> N + 1
-			}*/
-
-//			String query = "select distinct t from TeamJ t join fetch t.members";
-//			String query = "select m from MemberJ t join fetch m.team";
-			String query = "select t from TeamJ t";
-			List<Team> result = em.createQuery(query, Team.class)
-					.setFirstResult(0)
-					.setMaxResults(2)
-					.getResultList();
-
-			System.out.println("result.size() = " + result.size());
-
-			for (Team team : result) {
-				System.out.println("team = " + team.getName() + "|members=" + team.getMembers().size());
-				for (Member member : team.getMembers()) {
-					System.out.println("-> member = " + member);
-				}
+			for (Member member : findMember) {
+				System.out.println("member = " + member);
 			}
+
+
 
 			tx.commit();
 		} catch (Exception e) {
